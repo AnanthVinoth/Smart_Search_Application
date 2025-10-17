@@ -53,6 +53,17 @@ const SmartSearch: React.FC<SmartSearchProps> = ({
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
 
+  // Handle escape key to close dropdown
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && open) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [open]);
+
   const handleSelect = (item: SearchResult) => {
     setQuery(item.label);
     setOpen(false);
