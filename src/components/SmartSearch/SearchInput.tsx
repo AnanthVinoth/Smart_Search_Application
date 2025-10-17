@@ -12,8 +12,9 @@ const getResponsiveWidth = () => {
   if (window.innerWidth <= 375) return "82vw"; // mobile
   if (window.innerWidth <= 414) return "84vw"; // mobile
   if (window.innerWidth <= 430) return "85vw"; // mobile
+  if (window.innerWidth <= 540) return "78vw"; // mobile
   if (window.innerWidth <= 600) return "90vw"; // mobile
-  if (window.innerWidth <= 1024) return "55vw"; // tablet
+  if (window.innerWidth <= 1024) return "50vw"; // tablet
   return "25vw"; // desktop
 };
 
