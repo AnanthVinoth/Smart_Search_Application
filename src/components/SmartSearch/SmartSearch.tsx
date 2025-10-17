@@ -30,6 +30,7 @@ const SmartSearch: React.FC<SmartSearchProps> = ({
       if (query.trim() && onSearch) {
         setLoading(true);
         const res = await onSearch(query);
+        console.log("Search results:", res);
         setResults(res);
         setOpen(true);
         setLoading(false);
