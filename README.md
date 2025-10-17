@@ -33,6 +33,7 @@ npm install
 
 # Start development server
 npm run dev
+# App will be available at http://localhost:5173
 
 # Build for production
 npm run build
@@ -200,10 +201,9 @@ npm run test:e2e     # Run E2E tests
 ## 🤝 Contributing
 
 1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/new-feature`
-3. Commit changes: `git commit -am 'Add new feature'`
-4. Push to branch: `git push origin feature/new-feature`
-5. Submit a Pull Request
+2. branch name: `git checkout main`
+3. Commit changes: `git commit -m 'Add new feature'`
+4. Push to branch: `git push origin main`
 
 ## 📄 License
 
