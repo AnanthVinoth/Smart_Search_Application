@@ -59,41 +59,6 @@ describe("SmartSearch Component", () => {
         expect(mockSelect).toHaveBeenCalledWith(mockData[0]);
     });
 
-    // test("does not render result items when results is empty", async () => {
-    //     const mockSearch = jest.fn(async () => []);
-    //     render(<SmartSearch onSearch={mockSearch} />);
-
-    //     const input = screen.getByRole("textbox");
-    //     fireEvent.change(input, { target: { value: "no-match" } });
-
-    //     await waitFor(() => {
-    //         // No result items should be rendered
-    //         expect(screen.queryByRole("option")).not.toBeInTheDocument();
-    //     });
-    // });
-
-    // test("clears results and closes dropdown when query is empty or whitespace", async () => {
-    //     const mockSearch = jest.fn(async () => []);
-    //     render(<SmartSearch onSearch={mockSearch} />);
-
-    //     const input = screen.getByRole("textbox");
-    //     // Type whitespace
-    //     fireEvent.change(input, { target: { value: "   " } });
-
-    //     await waitFor(() => {
-    //         // Dropdown should not be open
-    //         expect(screen.queryByText("No results found")).not.toBeInTheDocument();
-    //     });
-
-    //     // Type empty string
-    //     fireEvent.change(input, { target: { value: "" } });
-
-    //     await waitFor(() => {
-    //         // Dropdown should not be open
-    //         expect(screen.queryByText("No results found")).not.toBeInTheDocument();
-    //     });
-    // });
-
     test("closes dropdown when clicking outside", async () => {
         const mockSearch = jest.fn(async () => mockData);
         render(<SmartSearch onSearch={mockSearch} />);
@@ -110,6 +75,26 @@ describe("SmartSearch Component", () => {
 
         await waitFor(() => {
             expect(screen.queryByText("Account 1234")).not.toBeInTheDocument();
+        });
+    });
+
+    test("keeps dropdown open when clicking inside container", async () => {
+        const mockSearch = jest.fn(async () => mockData);
+        render(<SmartSearch onSearch={mockSearch} />);
+
+        const input = screen.getByRole("textbox");
+        fireEvent.change(input, { target: { value: "Account" } });
+
+        await waitFor(() => {
+            expect(screen.getByText("Account 1234")).toBeInTheDocument();
+        });
+
+        // Simulate clicking inside the container (on the input)
+        fireEvent.mouseDown(input);
+
+        // Dropdown should remain open
+        await waitFor(() => {
+            expect(screen.getByText("Account 1234")).toBeInTheDocument();
         });
     });
 
@@ -188,6 +173,70 @@ describe("SmartSearch Component", () => {
         const input = screen.getByRole("textbox");
         expect(input).toHaveAttribute("aria-label", "Search");
     });
+
+    test("highlights dropdown item on mouse enter", async () => {
+        const mockSearch = jest.fn(async () => mockData);
+        const mockSelect = jest.fn();
+
+        render(<SmartSearch onSearch={mockSearch} onSelect={mockSelect} />);
+
+        const input = screen.getByRole("textbox");
+        fireEvent.change(input, { target: { value: "account" } });
+
+        // Wait for dropdown to appear
+        await waitFor(() => {
+            expect(screen.getByText("Account 1234")).toBeInTheDocument();
+        });
+
+        // Get the dropdown items
+        const firstItem = screen.getByText("Account 1234").closest("li");
+        const secondItem = screen.getByText("Customer John").closest("li");
+
+        // Ensure items exist
+        expect(firstItem).toBeInTheDocument();
+        expect(secondItem).toBeInTheDocument();
+
+        // Initially no item should be highlighted
+        expect(firstItem).not.toHaveClass("highlighted");
+        expect(secondItem).not.toHaveClass("highlighted");
+
+        // Mouse enter on second item should highlight it
+        if (secondItem) {
+            fireEvent.mouseEnter(secondItem);
+            expect(secondItem).toHaveClass("highlighted");
+            expect(firstItem).not.toHaveClass("highlighted");
+        }
+
+        // Mouse enter on first item should highlight it
+        if (firstItem) {
+            fireEvent.mouseEnter(firstItem);
+            expect(firstItem).toHaveClass("highlighted");
+            expect(secondItem).not.toHaveClass("highlighted");
+        }
+    });
+
+    test("keyboard navigation does nothing when no results found", async () => {
+        const mockSearch = jest.fn(async () => []); // Return empty array
+        render(<SmartSearch onSearch={mockSearch} />);
+
+        const input = screen.getByRole("textbox");
+        fireEvent.change(input, { target: { value: "nonexistent" } });
+
+        // Wait for "No results found" to appear
+        await waitFor(() => {
+            expect(screen.getByText("No results found")).toBeInTheDocument();
+        });
+
+        // Try keyboard navigation - should do nothing since results.length === 0
+        fireEvent.keyDown(document, { key: "ArrowDown" });
+        fireEvent.keyDown(document, { key: "ArrowUp" });
+        fireEvent.keyDown(document, { key: "Enter" });
+
+        // Verify no errors occur and "No results found" is still displayed
+        expect(screen.getByText("No results found")).toBeInTheDocument();
+        
+        // Verify no items are highlighted (there are none to highlight)
+        const highlightedItems = document.querySelectorAll(".highlighted");
+        expect(highlightedItems).toHaveLength(0);
+    });
 });
-
-
