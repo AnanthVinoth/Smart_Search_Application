@@ -39,8 +39,11 @@
   width: 100%;
   max-width: 400px;
   font-family: "Segoe UI", sans-serif;
-  /* background: var(--search-bg); */
   color: var(--search-text);
+  /* Mobile performance optimizations */
+  contain: layout style paint;
+  will-change: transform;
+  transform: translateZ(0); /* Hardware acceleration */
 }
 
 .clear-btn {
@@ -87,6 +90,11 @@
   box-shadow: 0 8px 32px var(--search-dropdown-shadow);
   backdrop-filter: blur(8px);
   animation: dropdownFadeIn 0.2s ease-out;
+  /* Mobile performance optimizations */
+  contain: layout style paint;
+  transform: translateZ(0);
+  -webkit-overflow-scrolling: touch; /* iOS smooth scrolling */
+  scroll-behavior: smooth;
 }
 
 .search-dropdown::-webkit-scrollbar {
@@ -115,6 +123,13 @@
   border: 1px solid transparent;
   position: relative;
   overflow: hidden;
+  /* Mobile touch optimizations */
+  min-height: 44px; /* iOS recommended touch target */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+  touch-action: manipulation;
 }
 
 .search-dropdown li::before {
@@ -216,13 +231,38 @@
   border-left: 3px solid #f97316;
 }
 
+/* Mobile-optimized dropdown loading */
+.dropdown-loading {
+  padding: 16px;
+  text-align: center;
+  color: var(--search-text);
+  opacity: 0.7;
+  font-size: 14px;
+}
+
+/* Mobile performance optimized animations */
 @keyframes dropdownFadeIn {
   from {
     opacity: 0;
-    transform: translateY(-8px) scale(0.95);
+    transform: translate3d(0, -8px, 0) scale(0.95);
   }
   to {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+/* Respect user's motion preferences for better mobile performance */
+@media (prefers-reduced-motion: reduce) {
+  .search-dropdown {
+    animation: none;
+  }
+  
+  .search-dropdown li {
+    transition: none;
+  }
+  
+  .loader {
+    animation: none;
   }
 }

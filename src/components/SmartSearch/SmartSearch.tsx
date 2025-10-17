@@ -1,8 +1,10 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback, useMemo, lazy, Suspense } from "react";
 import "./smartSearch.css";
 import type { SearchResult } from "../../type/types";
 import SearchInput from "./SearchInput";
-import SearchDropdown from "./SearchDropdown";
+
+// Lazy load SearchDropdown for better mobile performance
+const SearchDropdown = lazy(() => import("./SearchDropdown"));
 
 interface SmartSearchProps {
   placeholder?: string;
@@ -24,51 +26,84 @@ const SmartSearch: React.FC<SmartSearchProps> = ({
   
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Debounce effect
+  // Optimized debounce effect for mobile performance
   useEffect(() => {
+    const controller = new AbortController();
     const handler = setTimeout(async () => {
       if (query.trim() && onSearch) {
         setLoading(true);
-        const res = await onSearch(query);
-        setResults(res);
-        setOpen(true);
-        setLoading(false);
+        try {
+          const res = await onSearch(query);
+          if (!controller.signal.aborted) {
+            setResults(res);
+            setOpen(true);
+            setLoading(false);
+          }
+        } catch (error) {
+          if (!controller.signal.aborted) {
+            setLoading(false);
+            setResults([]);
+          }
+        }
       } else {
         setResults([]);
         setOpen(false);
+        setLoading(false);
       }
     }, 300);
 
-    return () => clearTimeout(handler);
+    return () => {
+      clearTimeout(handler);
+      controller.abort();
+    };
   }, [query, onSearch]);
 
-  // Close dropdown when clicking outside
+  // Optimized event listeners for mobile performance
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
       if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
         setOpen(false);
       }
     };
-    document.addEventListener("mousedown", handleClick);
-    return () => document.removeEventListener("mousedown", handleClick);
-  }, []);
-
-  // Handle escape key to close dropdown
-  useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape" && open) {
         setOpen(false);
       }
     };
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
+
+    // Use passive listeners for better mobile scroll performance
+    document.addEventListener("mousedown", handleClick, { passive: true });
+    document.addEventListener("keydown", handleKeyDown, { passive: true });
+    
+    return () => {
+      document.removeEventListener("mousedown", handleClick);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
   }, [open]);
 
-  const handleSelect = (item: SearchResult) => {
+  // Memoized callback for better mobile performance
+  const handleSelect = useCallback((item: SearchResult) => {
     setQuery(item.label);
     setOpen(false);
     onSelect?.(item);
-  };
+  }, [onSelect]);
+
+  // Memoized clear handler
+  const handleClear = useCallback(() => {
+    setQuery("");
+    setResults([]);
+    setOpen(false);
+  }, []);
+
+  // Memoized dropdown component to prevent unnecessary re-renders
+  const dropdownComponent = useMemo(() => {
+    if (!open) return null;
+    return (
+      <Suspense fallback={<div className="dropdown-loading">Loading...</div>}>
+        <SearchDropdown results={results} onSelect={handleSelect} />
+      </Suspense>
+    );
+  }, [open, results, handleSelect]);
 
   return (
     <div className={`smart-search`} data-theme={theme} ref={containerRef}>
@@ -77,11 +112,9 @@ const SmartSearch: React.FC<SmartSearchProps> = ({
         placeholder={placeholder}
         loading={loading}
         onChange={setQuery}
-        onClear={() => setQuery("")}
+        onClear={handleClear}
       />
-      {open && (
-        <SearchDropdown results={results} onSelect={handleSelect} />
-      )}
+      {dropdownComponent}
     </div>
   );
 };
