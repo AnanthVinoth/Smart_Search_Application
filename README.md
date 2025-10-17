@@ -11,7 +11,7 @@ A modern, responsive smart search component built with React, TypeScript, and Vi
 - **📱 Responsive Design**: Mobile-first approach with adaptive sizing
 - **🎯 Type Safety**: Full TypeScript implementation
 - **🧪 Comprehensive Testing**: Unit tests with Jest and E2E tests with Playwright
-- **♿ Accessibility**: Basic ARIA attributes and keyboard support
+- **♿ Accessibility**: ARIA attributes, keyboard support, and Windows Narrator tested
 
 ## 🛠️ Tech Stack
 
@@ -97,6 +97,32 @@ src/
 └── App.tsx                      # Main application
 ```
 
+## ♿ Accessibility
+
+The Smart Search component has been thoroughly tested for accessibility compliance:
+
+### Windows Narrator Testing
+- **✅ Screen Reader Compatible**: Fully tested with Windows Narrator
+- **✅ Proper Focus Management**: Focus moves logically through search input and dropdown items
+- **✅ Keyboard Navigation**: All functionality accessible via keyboard
+- **✅ ARIA Labels**: Proper labeling for search input, dropdown, and results
+- **✅ Live Regions**: Search results are announced when they change
+- **✅ Role Definitions**: Semantic roles for better screen reader understanding
+
+### Accessibility Features
+- **Focus Indicators**: Clear visual focus states for keyboard navigation
+- **High Contrast Support**: Works with Windows high contrast themes
+- **Reduced Motion**: Respects `prefers-reduced-motion` for animations
+- **Touch Targets**: Minimum 44px touch targets for mobile accessibility
+- **Color Independence**: Information not conveyed by color alone
+
+### Testing Process
+1. Enable Windows Narrator (Windows + Ctrl + Enter)
+2. Navigate through the search component using Tab and arrow keys
+3. Verify all elements are properly announced
+4. Test search functionality with keyboard only
+5. Confirm dropdown navigation works with screen reader
+
 ## 🧪 Testing
 
 ### Run Unit Tests
@@ -114,6 +140,14 @@ npm run test:e2e:ui   # Run with UI mode
 ### Test Coverage
 ```bash
 npm run test -- --coverage
+```
+
+### Accessibility Testing
+```bash
+# Manual testing with Windows Narrator
+# 1. Press Windows + Ctrl + Enter to start Narrator
+# 2. Navigate to http://localhost:5173
+# 3. Test keyboard navigation and screen reader announcements
 ```
 
 ## 🎨 Component Props
