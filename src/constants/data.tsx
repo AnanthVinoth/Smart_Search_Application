@@ -1,4 +1,4 @@
-import type { SearchResult } from "../components/SmartSearch/types";
+import type { SearchResult } from "../type/types";
 
 const mockData: SearchResult[] = [
   // Accounts

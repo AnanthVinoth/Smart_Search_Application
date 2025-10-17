@@ -3,8 +3,7 @@ import SmartSearch from "../../components/SmartSearch/SmartSearch";
 import type { SearchResult } from "../../type/types";
 import "@testing-library/jest-dom";
 
-// If using Jest, jest should be available globally. If not, import or define a mock function:
-declare const jest: any;
+// Jest is available globally in test environment
 
 const mockData: SearchResult[] = [
     { id: "1", label: "Account 1234", description: "₹10,000", type: "account" },

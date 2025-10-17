@@ -11,12 +11,6 @@ function App() {
   useEffect(() => {
     document.body.className = `theme-${theme}`;
   }, [theme]);
-  // const handleSearch = async (query: string): Promise<SearchResult[]> => {
-  //   // simulate API
-  //   return mockData.filter((item) =>
-  //     item.label.toLowerCase().includes(query.toLowerCase())
-  //   );
-  // };
 
   const handleSearch = async (query: string): Promise<SearchResult[]> => {
     await new Promise((r) => setTimeout(r, 300)); // simulate API delay
