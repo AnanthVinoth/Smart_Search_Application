@@ -1,0 +1,228 @@
+.smart-search.light {
+  --search-bg: #ffffff;
+  --search-text: #222;
+  --search-border: #ccc;
+  --search-hover-bg: #f3f3f3;
+  --search-dropdown-bg: #ffffff;
+  --search-dropdown-shadow: rgba(0, 0, 0, 0.1);
+}
+
+.smart-search.dark {
+  --search-bg: #1f2937;
+  --search-text: #f9fafb;
+  --search-border: #374151;
+  --search-hover-bg: #374151;
+  --search-dropdown-bg: #1f2937;
+  --search-dropdown-shadow: rgba(0, 0, 0, 0.6);
+}
+
+:root {
+  --search-bg: #ffffff;
+  --search-text: #222;
+  --search-border: #ccc;
+  --search-hover-bg: #f3f3f3;
+  --search-dropdown-bg: #ffffff;
+  --search-dropdown-shadow: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="dark"] {
+  --search-bg: #1e1e1e;
+  --search-text: #f9f9f9;
+  --search-border: #444;
+  --search-hover-bg: #333;
+  --search-dropdown-bg: #2c2c2c;
+  --search-dropdown-shadow: rgba(0, 0, 0, 0.5);
+}
+
+.smart-search {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  font-family: "Segoe UI", sans-serif;
+  /* background: var(--search-bg); */
+  color: var(--search-text);
+}
+
+.clear-btn {
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.loader {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #ccc;
+  border-top-color: #333;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.search-input {
+  background: var(--search-bg);
+  border: 1px solid var(--search-border);
+  border-radius: 8px;
+}
+
+.search-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--search-dropdown-bg);
+  border: 1px solid var(--search-border);
+  border-radius: 12px;
+  margin-top: 8px;
+  padding: 8px;
+  list-style: none;
+  z-index: 1000;
+  max-height: 280px;
+  overflow-y: auto;
+  box-shadow: 0 8px 32px var(--search-dropdown-shadow);
+  backdrop-filter: blur(8px);
+  animation: dropdownFadeIn 0.2s ease-out;
+}
+
+.search-dropdown::-webkit-scrollbar {
+  width: 6px;
+}
+
+.search-dropdown::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.search-dropdown::-webkit-scrollbar-thumb {
+  background: var(--search-border);
+  border-radius: 3px;
+}
+
+.search-dropdown::-webkit-scrollbar-thumb:hover {
+  background: var(--search-text);
+}
+
+.search-dropdown li {
+  padding: 12px 16px;
+  margin: 4px 0;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.15s ease;
+  border: 1px solid transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.search-dropdown li::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  transition: left 0.5s;
+}
+
+.search-dropdown li:hover::before {
+  left: 100%;
+}
+
+.search-dropdown li:hover,
+.search-dropdown li.highlighted {
+  background: var(--search-hover-bg);
+  border-color: var(--search-border);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.search-dropdown li.highlighted {
+  background: linear-gradient(135deg, var(--search-hover-bg), rgba(59, 130, 246, 0.1));
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+.search-dropdown li strong {
+  display: block;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--search-text);
+  margin-bottom: 4px;
+  line-height: 1.4;
+}
+
+.search-dropdown li .desc {
+  font-size: 12px;
+  color: var(--search-text);
+  opacity: 0.7;
+  line-height: 1.3;
+  margin-top: 2px;
+}
+
+.search-dropdown li.no-results {
+  text-align: center;
+  color: var(--search-text);
+  opacity: 0.6;
+  font-style: italic;
+  cursor: default;
+  padding: 20px;
+}
+
+.search-dropdown li.no-results:hover {
+  background: transparent;
+  transform: none;
+  box-shadow: none;
+  border-color: transparent;
+}
+
+/* Type-specific styling */
+.search-dropdown li[data-type="account"] {
+  border-left: 3px solid #10b981;
+}
+
+.search-dropdown li[data-type="customer"] {
+  border-left: 3px solid #3b82f6;
+}
+
+.search-dropdown li[data-type="transaction"] {
+  border-left: 3px solid #f59e0b;
+}
+
+.search-dropdown li[data-type="loan"] {
+  border-left: 3px solid #ef4444;
+}
+
+.search-dropdown li[data-type="insurance"] {
+  border-left: 3px solid #8b5cf6;
+}
+
+.search-dropdown li[data-type="investment"] {
+  border-left: 3px solid #06b6d4;
+}
+
+.search-dropdown li[data-type="branch"] {
+  border-left: 3px solid #84cc16;
+}
+
+.search-dropdown li[data-type="card"] {
+  border-left: 3px solid #f97316;
+}
+
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
