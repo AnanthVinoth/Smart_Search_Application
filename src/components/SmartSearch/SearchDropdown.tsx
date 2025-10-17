@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import type { SearchResult } from "./types";
+import type { SearchResult } from "../../type/types";
 
 interface SearchDropdownProps {
   results: SearchResult[];

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./smartSearch.css";
-import type { SearchResult } from "./types";
+import type { SearchResult } from "../../type/types";
 import SearchInput from "./SearchInput";
 import SearchDropdown from "./SearchDropdown";
 

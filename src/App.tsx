@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import SmartSearch from "./components/SmartSearch/SmartSearch";
-import type { SearchResult } from "./components/SmartSearch/types";
+import type { SearchResult } from "./type/types";
 import "./App.css";
 import mockData from "./constants/data";
 

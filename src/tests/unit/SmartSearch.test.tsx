@@ -1,6 +1,6 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import SmartSearch from "../../components/SmartSearch/SmartSearch";
-import type { SearchResult } from "../../components/SmartSearch/types";
+import type { SearchResult } from "../../type/types";
 import "@testing-library/jest-dom";
 
 // If using Jest, jest should be available globally. If not, import or define a mock function:
