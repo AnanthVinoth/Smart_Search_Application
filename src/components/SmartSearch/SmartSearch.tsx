@@ -47,22 +47,26 @@ const SmartSearch: React.FC<SmartSearchProps> = ({
     const handleClick = (e: MouseEvent) => {
       if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
         setOpen(false);
+        setQuery(""); // Clear the search text
+        setResults([]); // Clear results
       }
     };
     document.addEventListener("mousedown", handleClick);
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
 
-  // Handle escape key to close dropdown
+  // Handle escape key to clear search and close dropdown
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && open) {
-        setOpen(false);
+      if (e.key === "Escape") {
+        setQuery(""); // Clear the search text
+        setResults([]); // Clear results
+        setOpen(false); // Close dropdown
       }
     };
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [open]);
+  }, []);
 
   const handleSelect = (item: SearchResult) => {
     setQuery(item.label);
