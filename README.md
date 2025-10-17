@@ -5,7 +5,7 @@ A modern, responsive smart search component built with React, TypeScript, and Vi
 ## 🚀 Features
 
 - **🔍 Intelligent Search**: Debounced search with async data fetching
-- **⌨️ Keyboard Navigation**: Arrow keys, Enter, and Escape support
+- **⌨️ Keyboard Navigation**: Arrow keys, Enter, Escape support, Placeholder, clear button, loading state, dropdown
 - **🎨 Theming**: Light and dark mode with smooth transitions
 - **🏦 Banking Data**: 20+ mock banking entities (accounts, customers, transactions, loans, etc.)
 - **📱 Responsive Design**: Mobile-first approach with adaptive sizing
@@ -25,8 +25,8 @@ A modern, responsive smart search component built with React, TypeScript, and Vi
 
 ```bash
 # Clone the repository
-git clone <repository-url>
-cd task
+git clone https://github.com/AnanthVinoth/Smart_Search_Application.git
+cd smart_search_application
 
 # Install dependencies
 npm install
